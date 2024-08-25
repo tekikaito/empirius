@@ -19,7 +19,6 @@ from wiki_scraper import get_wiki_page_urls, get_parsed_wiki_sections
 
 # Constants
 DEFAULT_WIKI_URL                    = "https://wiki.empirerift.com/"
-# DEFAULT_MODEL                       = "gpt-3.5-turbo-0125"
 DEFAULT_MODEL                       = "gpt-4o-mini"
 DEFAULT_MODEL_TEMPERATURE           = 0.0
 DEFAULT_INSTRUCTION_PROMPT_FILE     = "instruction_prompt.txt"
@@ -39,38 +38,12 @@ def output_documents(docs: list[Document]):
         print(f"Content:\n{doc.page_content[:300]}")
         print("-------------------")
         print(f"Metadata:\n{doc.metadata}")
-        print("-------------------\n"*3)
+        print("-------------------\n\n")
         
 def create_faiss_retriever(docs: list[Document], k: int) -> RetrieverLike:
     vectorstore = FAISS.from_documents(docs, OpenAIEmbeddings())
     retriever = vectorstore.as_retriever(search_kwargs={'k': k})
     return retriever
-
-
-
-###################################################################################################################
-# Main function                                                                                                   |
-#                                                                                                                 |
-# This function is the entry point for the bot. It loads environment variables, initializes the bot, and starts   |
-# the bot.                                                                                                        |
-#                                                                                                                 |
-###################################################################################################################
-# ---> Load config environment variables                                                                          |
-#                                                                                                                 |
-# | Variable Name       | Description                                                                             |
-# |---------------------|-----------------------------------------------------------------------------------------|
-# | OPENAI_API_KEY      | The OpenAI API key to use for the LLM. Required.                                        |
-# | DISCORD_TOKEN       | The Discord bot token to use for the bot. Required.                                     |
-# | WIKI_URL            | The URL of the wiki to scrape for documents. Defaults to https://wiki.empirerift.com/   |
-# | PROMPT_FILE         | The file containing the instruction prompt. Defaults to prompt.txt                      |
-# | MEMORIES_DIR        | The directory to store chat history. Defaults to memories/                              |
-# | OPENAI_MODEL        | The OpenAI model to use for the LLM. Defaults to gpt-3.5-turbo-0125                     |
-# | MODEL_TEMPERATURE   | The temperature to use for the LLM. Defaults to 0.3                                     |
-# | RETREIVER_K         | The number of documents to retrieve from the retriever. Defaults to 5                   |
-# | DEBUG_ENABLED       | Enable debug mode. Defaults to false                                                    |
-# | VERBOSE             | Enable verbose mode. Defaults to false                                                  |
-# | ONLY_DOCS           | Only load documents and exit. Defaults to false                                         |
-###################################################################################################################
 
 if __name__ == '__main__':
     # Load environment variables
