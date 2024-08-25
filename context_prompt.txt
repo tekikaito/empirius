@@ -1,0 +1,6 @@
+**Kontext zur aktuellen Anfrage**
+Nutzer: {user}
+Uhrzeit: {time}
+
+Wiki-Auszüge:
+{context}
