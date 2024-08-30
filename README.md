@@ -23,25 +23,6 @@ Ensure the following environment variables are set either in your `.env` file or
 - `OPENAI_API_KEY`: Your OpenAI API key (required).
 - `DISCORD_TOKEN`: Your Discord bot token (required for Discord integration).
 
-## Development
-
-To contribute to the project, follow these steps:
-
-1. **Fork the repository**.
-2. **Create a new branch** for your feature or bugfix:
-   ```bash
-   git checkout -b feature-branch-name
-   ```
-3. **Make your changes** and commit them:
-   ```bash
-   git commit -m "Description of changes"
-   ```
-4. **Push to your branch**:
-   ```bash
-   git push origin feature-branch-name
-   ```
-5. **Create a Pull Request** on GitHub.
-
 ## Usage
 
 ### Installation
