@@ -42,18 +42,6 @@ To contribute to the project, follow these steps:
    ```
 5. **Create a Pull Request** on GitHub.
 
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-## Acknowledgements
-
-This project uses the following libraries and tools:
-
-- [LangChain](https://github.com/hwchase17/langchain) for LLM support.
-- [FAISS](https://github.com/facebookresearch/faiss) for vector search.
-- [dotenv](https://github.com/theskumar/python-dotenv) for managing environment variables.
-
 ## Usage
 
 ### Installation
@@ -110,6 +98,14 @@ To output the documents stored in the knowledge base:
 python main.py docs
 ```
 
+## Acknowledgements
+
+This project uses the following libraries and tools:
+
+- [LangChain](https://github.com/hwchase17/langchain) for LLM support.
+- [FAISS](https://github.com/facebookresearch/faiss) for vector search.
+- [dotenv](https://github.com/theskumar/python-dotenv) for managing environment variables.
+
 ## License
 
-[CC0 License](https://creativecommons.org/publicdomain/zero/1.0)
+This project is licensed under the CC0 License. See the [LICENSE](LICENSE) file for details.
