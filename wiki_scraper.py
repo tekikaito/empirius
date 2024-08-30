@@ -7,9 +7,12 @@ import requests
 from urllib.parse import urljoin
 from bs4 import BeautifulSoup
 
-HTML_HEADERS = ["h1", "h2", "h3", "h4", "h5", "h6"]
+HTML_HEADERS                    = ["h1", "h2", "h3", "h4", "h5", "h6"]
+EMPIRERIFT_WIKI_URL             = "https://wiki.empirerift.com/"
+REALISTIC_SEASONS_WIKI_URL      = "https://wiki.realisticseasons.com/"
+MEDIEVAL_FACTIONS_WIKI_URL      = "https://github.com/Dans-Plugins/Medieval-Factions/wiki"
 
-def get_wiki_page_urls(wiki_url: str) -> list[str]:
+def _get_wiki_page_urls(wiki_url: str) -> list[str]:
     page_urls = []
     wiki = requests.get(wiki_url)
 
@@ -32,9 +35,8 @@ def _deduplicate_docs(docs: list[Document]) -> list[Document]:
             unique_docs.append(doc)
     return unique_docs
 
-def get_parsed_wiki_sections(page_urls: list[str], debug: bool = True) -> list[Document]:
+def _get_parsed_wiki_sections(page_urls: list[str], debug: bool = True) -> list[Document]:
     docs = []
-    
 
     def dprint(*args, **kwargs):
         if debug:
@@ -56,6 +58,8 @@ def get_parsed_wiki_sections(page_urls: list[str], debug: bool = True) -> list[D
         # Find all header elements that have links
         header_tags = soup.find_all(HTML_HEADERS)
         
+        print(f"Found {len(header_tags)} headers on {url}")
+
         # Initialize text splitter with desired headers
         splitter = HTMLHeaderTextSplitter(headers_to_split_on=HTML_HEADERS)
 
@@ -89,3 +93,59 @@ def get_parsed_wiki_sections(page_urls: list[str], debug: bool = True) -> list[D
         doc.page_content = f"Auszug von Wiki URL: {doc.metadata['source']}\n\n{doc.page_content}" 
                     
     return docs
+
+def _get_parsed_wiki_pages(page_urls: list[str], debug: bool = True) -> list[Document]:
+    docs = []
+
+    def dprint(*args, **kwargs):
+        if debug:
+            print(*args, **kwargs)
+
+    n_pages = 0
+
+    # Output raw content of all the sites
+    dprint(f"Discovered {len(page_urls)} websites")
+    for (i, url) in enumerate(page_urls):
+        dprint(f"Fetching URL {i + 1}: {url}")
+        response = requests.get(url)
+        soup = BeautifulSoup(response.content, 'html.parser')
+
+        # Remove the navigation section to avoid redundancy
+        for nav in soup.find_all(['nav', 'aside']):  # Adjust based on actual navigation tags
+            nav.decompose()
+
+        if url in [d.metadata['source'] for d in docs]:
+            continue
+
+        doc = Document(page_content=soup.get_text())
+        doc.metadata['source'] = url
+        docs.append(doc)
+
+    dprint(f"Loaded {len(docs)} documents from {len(page_urls)} websites")
+
+    # Filter out empty documents
+    docs = _filter_empty_docs(docs)
+    dprint(f"After filtering empty documents, we have {len(docs)} documents")
+
+    # Filter out duplicate documents
+    docs = _deduplicate_docs(docs)
+    dprint(f"After filtering duplicate documents, we have {len(docs)} documents")
+
+    # Add metadata to the documents
+    for doc in docs:
+        # add url from metadata to page content
+        doc.page_content = f"Auszug von Wiki URL: {doc.metadata['source']}\n\n{doc.page_content}" 
+                    
+    return docs
+
+def get_empirerift_wiki_sections(debug: bool = True) -> list[Document]:
+    page_urls = _get_wiki_page_urls(EMPIRERIFT_WIKI_URL)
+    return _get_parsed_wiki_sections(page_urls, debug=debug)
+
+def get_realisticseasons_wiki_sections(debug: bool = True) -> list[Document]:
+    page_urls = _get_wiki_page_urls(REALISTIC_SEASONS_WIKI_URL)
+    return _get_parsed_wiki_sections(page_urls, debug=debug)
+
+def get_medieval_factions_wiki_sections(debug: bool = True) -> list[Document]:
+    page_urls = _get_wiki_page_urls(MEDIEVAL_FACTIONS_WIKI_URL)
+    return _get_parsed_wiki_pages(page_urls, debug=debug)
