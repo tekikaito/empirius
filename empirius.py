@@ -11,7 +11,7 @@ class EmpiriusBot(commands.Bot):
     """
     A Discord bot that uses the Empirius conversational RAG chain to answer questions.
     """
-    def __init__(self, per_user_history: bool, empirerift_knowledge_runnable: EmpireRiftKnowledgeRunnable):
+    def __init__(self, per_user: bool, runnable: EmpireRiftKnowledgeRunnable):
         """
         Initialize the EmpiriusBot.\n\n
         `empirerift_rag_chain: RunnableBindingBase`  - The EmpireRiftKnowledgeRAGChain to use for the bot.\n
@@ -21,8 +21,8 @@ class EmpiriusBot(commands.Bot):
         intents = discord.Intents.default()
         intents.message_content = True
         
-        self.per_user_history = per_user_history
-        self.empirius_knowledge_runnable = empirerift_knowledge_runnable
+        self.per_user_history = per_user
+        self.empirius_knowledge_runnable = runnable
         
         super().__init__(command_prefix="!", intents=intents)
         

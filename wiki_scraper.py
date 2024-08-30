@@ -138,14 +138,21 @@ def _get_parsed_wiki_pages(page_urls: list[str], debug: bool = True) -> list[Doc
                     
     return docs
 
-def get_empirerift_wiki_sections(debug: bool = True) -> list[Document]:
+def get_empirerift_wiki_docs(debug: bool = True) -> list[Document]:
     page_urls = _get_wiki_page_urls(EMPIRERIFT_WIKI_URL)
     return _get_parsed_wiki_sections(page_urls, debug=debug)
 
-def get_realisticseasons_wiki_sections(debug: bool = True) -> list[Document]:
+def get_realisticseasons_wiki_docs(debug: bool = True) -> list[Document]:
     page_urls = _get_wiki_page_urls(REALISTIC_SEASONS_WIKI_URL)
     return _get_parsed_wiki_sections(page_urls, debug=debug)
 
-def get_medieval_factions_wiki_sections(debug: bool = True) -> list[Document]:
+def get_medieval_factions_wiki_docs(debug: bool = True) -> list[Document]:
     page_urls = _get_wiki_page_urls(MEDIEVAL_FACTIONS_WIKI_URL)
     return _get_parsed_wiki_pages(page_urls, debug=debug)
+
+def get_all_wiki_docs(debug: bool = True) -> list[Document]:
+    docs = []
+    docs.extend(get_empirerift_wiki_docs(debug=debug))
+    docs.extend(get_realisticseasons_wiki_docs(debug=debug))
+    docs.extend(get_medieval_factions_wiki_docs(debug=debug))
+    return docs

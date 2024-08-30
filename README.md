@@ -1,21 +1,62 @@
-# empirius
+# Empirius: A LLM-Driven Discord Bot
 
-LLM-driven discord bot for Empire Rift. It retrieves documents from the wiki and uses them to generate responses to user queries.
-
-## Features
-
-- LLM-driven chatbot
-- Document retrieval from wiki
-- Chat history
-- Debug mode
-- Verbose mode
+Empirius is a powerful Discord bot designed to answer questions from a knowledge base using large language models. This bot leverages the capabilities of OpenAI's models, integrated with a FAISS-based vector store for efficient retrieval of relevant documents.
 
 ## Badges
 
 [![CC0 License](https://img.shields.io/badge/License-CC0%201.0-lightgrey.svg)](https://creativecommons.org/publicdomain/zero/1.0/)
 
+## Features
 
-## Run Locally
+- **LLM Integration**: Uses OpenAI's GPT models for generating high-quality responses.
+- **FAISS Vector Store**: Efficient document retrieval based on vector embeddings.
+- **Customizable Prompts**: Supports custom instruction and context prompts.
+- **Session-Based Memory**: Maintains conversation context across sessions.
+- **Local and Discord Modes**: Can run locally for testing or as a full-fledged Discord bot.
+
+This command will print the content and metadata of all documents retrieved from the knowledge base.
+
+## Environment Variables
+
+Ensure the following environment variables are set either in your `.env` file or your environment:
+
+- `OPENAI_API_KEY`: Your OpenAI API key (required).
+- `DISCORD_TOKEN`: Your Discord bot token (required for Discord integration).
+
+## Development
+
+To contribute to the project, follow these steps:
+
+1. **Fork the repository**.
+2. **Create a new branch** for your feature or bugfix:
+   ```bash
+   git checkout -b feature-branch-name
+   ```
+3. **Make your changes** and commit them:
+   ```bash
+   git commit -m "Description of changes"
+   ```
+4. **Push to your branch**:
+   ```bash
+   git push origin feature-branch-name
+   ```
+5. **Create a Pull Request** on GitHub.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Acknowledgements
+
+This project uses the following libraries and tools:
+
+- [LangChain](https://github.com/hwchase17/langchain) for LLM support.
+- [FAISS](https://github.com/facebookresearch/faiss) for vector search.
+- [dotenv](https://github.com/theskumar/python-dotenv) for managing environment variables.
+
+## Usage
+
+### Installation
 
 Clone the project
 
@@ -29,42 +70,45 @@ Go to the project directory
 cd empirius
 ```
 
-Create pipenv environment and install dependencies
+Create pipenv environment
 
 ```bash
-pipenv shell && pipenv install
+pipenv shell
 ```
 
-Create a `.env` file in the root directory and add the following:
+Install dependencies
 
 ```bash
-OPENAI_API_KEY=your_openai_api_key
-DISCORD_TOKEN=your_discord_bot_token
+pipenv install
 ```
 
-Start the bot
+### Run Mode
+
+To start the bot in run mode, which interacts with users on Discord:
 
 ```bash
-python main.py
+python main.py run
 ```
 
-## Environment Variables
+Options for the `run` subcommand:
 
-To run this project, you will need to add the following environment variables to your .env file
+- `--inst-prompt-file`: Path to the instruction prompt file (default: `instruction_prompt.txt`)
+- `--context-prompt-file`: Path to the context prompt file (default: `context_prompt.txt`)
+- `--memories-dir`: Directory to store session memories (default: `memories`)
+- `--openai-model`: OpenAI model to use (default: `gpt-4o-mini`)
+- `--temperature`: Model temperature (default: `0.3`)
+- `--top-p`: Model top-p (default: `0.9`)
+- `--k`: Number of retriever results to return (default: `7`)
+- `--debug`: Enable debug mode
+- `--local`: Run the bot locally without Discord integration
 
-| Variable Name         | Description                                                                             |
-|-----------------------|-----------------------------------------------------------------------------------------|
-| `OPENAI_API_KEY`      | The OpenAI API key to use for the LLM. **Required**.                                    |
-| `DISCORD_TOKEN`       | The Discord bot token to use for the bot. **Required**.                                 |
-| `WIKI_URL`            | The URL of the wiki to scrape for documents. Defaults to https://wiki.empirerift.com/   |
-| `PROMPT_FILE`         | The file containing the instruction prompt. Defaults to prompt.txt                      |
-| `MEMORIES_DIR`        | The directory to store chat history. Defaults to memories/                              |
-| `OPENAI_MODEL`        | The OpenAI model to use for the LLM. Defaults to gpt-3.5-turbo-0125                     |
-| `MODEL_TEMPERATURE`   | The temperature to use for the LLM. Defaults to 0.3                                     |
-| `RETREIVER_K`         | The number of documents to retrieve from the retriever. Defaults to 5                   |
-| `DEBUG_ENABLED`       | Enable debug mode. Defaults to false                                                    |
-| `VERBOSE`             | Enable verbose mode. Defaults to false                                                  |
-| `DEBUG_DOCS`          | Only load documents and exit. Defaults to false                                         |
+### Docs Mode
+
+To output the documents stored in the knowledge base:
+
+```bash
+python main.py docs
+```
 
 ## License
 

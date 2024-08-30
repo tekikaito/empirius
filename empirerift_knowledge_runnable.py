@@ -28,10 +28,10 @@ class EmpireRiftKnowledgeRunnable():
     def __init__(
         self,
         llm: ChatOpenAI,
-        instruction_prompt_fetcher: Callable[[], str],
-        context_prompt_fetcher: Callable[[], str],
+        get_instruction_prompt: Callable[[], str],
+        get_context_prompt: Callable[[], str],
         retriever: BaseRetriever,
-        history_fetcher: Callable[[str], BaseChatMessageHistory],
+        get_history: Callable[[str], BaseChatMessageHistory],
     ):
         """
         Initialize the EmpireRiftKnowledgeRAGChain.\n\n
@@ -41,8 +41,8 @@ class EmpireRiftKnowledgeRunnable():
         `llm: ChatOpenAI`                       - The OpenAI language model to use for the bot.\n
         `per_user_history: bool`                - Whether to store chat history per user or not.\n
         """
-        self.instruction_prompt = instruction_prompt_fetcher()
-        self.context_prompt = context_prompt_fetcher()
+        self.instruction_prompt = get_instruction_prompt()
+        self.context_prompt = get_context_prompt()
         self.retriever = retriever
         self.llm = llm
 
@@ -53,7 +53,7 @@ class EmpireRiftKnowledgeRunnable():
 
         self.runnable = RunnableWithMessageHistory(
             rag_chain,
-            get_session_history=history_fetcher,
+            get_session_history=get_history,
             input_messages_key="input",
             history_messages_key="chat_history",
             output_messages_key="answer",
