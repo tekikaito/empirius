@@ -1,4 +1,4 @@
-name: Build-Push Minecraft Backup Server
+name: Build-Push Empirius Docker Image
 
 on:
   push:
